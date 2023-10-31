@@ -1,2 +1,2 @@
 # guessTheNumber-game1
-Game 1
+This is my Game 1 
