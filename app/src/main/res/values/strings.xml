@@ -4,5 +4,10 @@
     <string name="enter_number">Enter the number</string>
     <string name="submit">Submit</string>
     <string name="score">Score</string>
+    <string name="hurray">Hurray!</string>
+    <string name="dialog_text">You guessed the correct number in </string>
+    <string name="attempts"> attempts</string>
+    <string name="exit">Exit</string>
+    <string name="play_again">Play Again</string>
 
 </resources>

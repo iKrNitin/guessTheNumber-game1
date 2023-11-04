@@ -1,5 +1,6 @@
 package com.example.gtn.screens
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -16,12 +18,14 @@ import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,14 +54,18 @@ fun GameScreen(gameViewModel:GTNViewModel){
             Text(text = stringResource(id = R.string.submit))
         }
 //4th element
-        GameScore(score = 1,
+        GameScore(score = gameViewModel.score,
             modifier = Modifier.padding(20.dp))
 
+    }
+    if (gameUiState.isGameOver){
+        DialogBox(score = gameViewModel.score,
+            onPlayAgain = {gameViewModel.resetGame()})
     }
 }
 
 @Composable
-fun GameScore(score:Int,
+fun GameScore(score:String,
               modifier: Modifier = Modifier){
     Card(modifier = modifier) {
         Text(text = stringResource(id = R.string.score),
@@ -102,10 +110,46 @@ fun GameLayout(
         }
     }
 }
+
+
+@Composable
+fun DialogBox(
+    modifier: Modifier = Modifier,
+    score: String,
+    onPlayAgain:() -> Unit,
+){
+    val activity = (LocalContext.current as Activity)
+    AlertDialog(
+        onDismissRequest = { /*TODO*/ },
+        
+        title = { Text(text = stringResource(id = R.string.hurray) )},
+        text = { Text(text = stringResource(id = R.string.dialog_text,score," attempts"))},
+        
+        modifier = modifier,
+        
+        dismissButton = { TextButton(
+            onClick = { activity.finish() }
+        ) {
+            Text(text = stringResource(id = R.string.exit))
+        }},
+        
+        confirmButton = { 
+            TextButton(onClick = onPlayAgain) {
+                Text(text = stringResource(id = R.string.play_again))
+            }
+        })
+
+}
+
+
+
 @Preview(showBackground = true)
 @Composable
 fun GameScreenPreview(){
 GTNTheme {
-GameScreen(gameViewModel = GTNViewModel())
+//GameScreen(gameViewModel = GTNViewModel())
+    DialogBox(score = "") {
+
+    }
 }
 }
